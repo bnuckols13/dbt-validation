@@ -406,6 +406,36 @@
         }
         .footer strong { color: var(--text-2); font-weight: 600; }
 
+        /* ---- Feelings wheel ---- */
+        .wheel-wrap {
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+        .wheel-canvas {
+            display: block;
+            margin: 0 auto;
+            cursor: pointer;
+            max-width: 100%;
+        }
+        .wheel-selection {
+            margin-top: 1rem;
+            min-height: 2.2rem;
+        }
+        .wheel-chip {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--surface);
+            transition: opacity 0.2s;
+        }
+        .wheel-hint {
+            font-size: 0.8rem;
+            color: var(--text-3);
+            margin-top: 0.4rem;
+        }
+
         /* ---- Responsive ---- */
         @media (max-width: 600px) {
             .container { padding: 2rem 1.25rem 3rem; }
@@ -502,9 +532,20 @@
                 <div class="step-num">1</div>
                 <div class="step-content">
                     <div class="step-q">How are you landing today? Use the feelings wheel if it helps.</div>
-                    <div class="step-hint">Not "good" or "fine." Pick a specific word. Restless, relieved, numb, cautious, scattered. The more precise the word, the more useful it is.</div>
+                    <div class="step-hint">No pizza words. Not "good" or "fine." Pick a specific word from the wheel, or find your own. The more precise the word, the more useful it is.</div>
                 </div>
             </div>
+        </div>
+
+        <div class="wheel-wrap">
+            <canvas id="feelings-wheel" class="wheel-canvas" width="500" height="500"></canvas>
+            <div class="wheel-selection">
+                <span id="wheel-chip" class="wheel-chip" style="display:none;"></span>
+                <div id="wheel-hint-text" class="wheel-hint">Click a slice to explore. Click an outer word to pick it.</div>
+            </div>
+        </div>
+
+        <div class="steps">
             <div class="step">
                 <div class="step-num">2</div>
                 <div class="step-content">
@@ -516,7 +557,7 @@
                 <div class="step-num">3</div>
                 <div class="step-content">
                     <div class="step-q">If you could wake up tomorrow with any quality or ability downloaded into you, Matrix-style, what would it be?</div>
-                    <div class="step-hint">Not a superpower. A human quality. Patience, confidence, the ability to say no without guilt, knowing how to rest. Whatever you'd want installed overnight.</div>
+                    <div class="step-hint">A superpower, a human quality, a skill. Patience, flight, the ability to say no without guilt, knowing how to rest, speaking Mandarin. Whatever you'd want installed overnight.</div>
                 </div>
             </div>
         </div>
@@ -980,6 +1021,272 @@
     function selectOption(el) {
         el.classList.toggle('selected');
     }
+
+    /* ---- Feelings Wheel ---- */
+    (function() {
+        const canvas = document.getElementById('feelings-wheel');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const chip = document.getElementById('wheel-chip');
+        const hintEl = document.getElementById('wheel-hint-text');
+
+        const W = 500, H = 500, CX = W/2, CY = H/2;
+        const R_INNER = 60, R_CORE = 120, R_MID = 185, R_OUTER = 245;
+
+        const DATA = [
+            { core: 'Angry', hue: '#C0392B', hueLight: '#F5D5D0', hueMid: '#E8ADA5',
+              secondary: [
+                { name: 'Hurt', tertiary: ['Embarrassed', 'Devastated'] },
+                { name: 'Hostile', tertiary: ['Frustrated', 'Jealous'] },
+                { name: 'Rage', tertiary: ['Furious', 'Violent'] },
+                { name: 'Critical', tertiary: ['Skeptical', 'Sarcastic'] },
+                { name: 'Distant', tertiary: ['Withdrawn', 'Suspicious'] }
+              ]},
+            { core: 'Scared', hue: '#8E44AD', hueLight: '#E8D5F0', hueMid: '#CDA4DF',
+              secondary: [
+                { name: 'Confused', tertiary: ['Bewildered', 'Perplexed'] },
+                { name: 'Rejected', tertiary: ['Excluded', 'Persecuted'] },
+                { name: 'Helpless', tertiary: ['Submissive', 'Insecure'] },
+                { name: 'Anxious', tertiary: ['Overwhelmed', 'Worried'] },
+                { name: 'Insecure', tertiary: ['Inadequate', 'Inferior'] }
+              ]},
+            { core: 'Sad', hue: '#2E86C1', hueLight: '#D4E6F1', hueMid: '#A9CCE3',
+              secondary: [
+                { name: 'Guilty', tertiary: ['Ashamed', 'Remorseful'] },
+                { name: 'Abandoned', tertiary: ['Ignored', 'Victimized'] },
+                { name: 'Despair', tertiary: ['Powerless', 'Vulnerable'] },
+                { name: 'Lonely', tertiary: ['Isolated', 'Empty'] },
+                { name: 'Bored', tertiary: ['Apathetic', 'Indifferent'] }
+              ]},
+            { core: 'Peaceful', hue: '#17A589', hueLight: '#D0ECE7', hueMid: '#A2D9CE',
+              secondary: [
+                { name: 'Content', tertiary: ['Serene', 'Relaxed'] },
+                { name: 'Thoughtful', tertiary: ['Pensive', 'Responsive'] },
+                { name: 'Intimate', tertiary: ['Loving', 'Sentimental'] },
+                { name: 'Trusting', tertiary: ['Secure', 'Thankful'] },
+                { name: 'Relaxed', tertiary: ['Satisfied', 'Calm'] }
+              ]},
+            { core: 'Powerful', hue: '#27AE60', hueLight: '#D5F5E3', hueMid: '#ABEBC6',
+              secondary: [
+                { name: 'Respected', tertiary: ['Valued', 'Worthwhile'] },
+                { name: 'Confident', tertiary: ['Successful', 'Proud'] },
+                { name: 'Important', tertiary: ['Discerning', 'Appreciated'] },
+                { name: 'Aware', tertiary: ['Sensitive', 'Intelligent'] },
+                { name: 'Faithful', tertiary: ['Nurturing', 'Trusting'] }
+              ]},
+            { core: 'Joyful', hue: '#D4A017', hueLight: '#FEF5D4', hueMid: '#F9E79F',
+              secondary: [
+                { name: 'Excited', tertiary: ['Daring', 'Fascinated'] },
+                { name: 'Cheerful', tertiary: ['Creative', 'Hopeful'] },
+                { name: 'Happy', tertiary: ['Delighted', 'Amused'] },
+                { name: 'Proud', tertiary: ['Triumphant', 'Illustrious'] },
+                { name: 'Energetic', tertiary: ['Playful', 'Provocative'] }
+              ]}
+        ];
+
+        let activeCore = -1;
+        let selectedWord = null;
+        let hitMap = []; // [{type, coreIdx, secIdx, terIdx, startAngle, endAngle, rMin, rMax}]
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            hitMap = [];
+            const N = DATA.length;
+            const coreSlice = (Math.PI * 2) / N;
+
+            for (let ci = 0; ci < N; ci++) {
+                const cat = DATA[ci];
+                const a0 = ci * coreSlice - Math.PI / 2;
+                const a1 = a0 + coreSlice;
+                const isActive = (activeCore === ci);
+
+                // Core ring
+                ctx.beginPath();
+                ctx.moveTo(CX, CY);
+                ctx.arc(CX, CY, R_CORE, a0, a1);
+                ctx.closePath();
+                ctx.fillStyle = cat.hue;
+                ctx.fill();
+                ctx.strokeStyle = '#FAFAF7';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                hitMap.push({ type: 'core', coreIdx: ci, startAngle: a0, endAngle: a1, rMin: 0, rMax: R_CORE });
+
+                // Core label
+                const aMid = (a0 + a1) / 2;
+                const lr = (R_INNER + R_CORE) / 2 + 10;
+                ctx.save();
+                ctx.translate(CX + Math.cos(aMid) * lr, CY + Math.sin(aMid) * lr);
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 13px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(cat.core, 0, 0);
+                ctx.restore();
+
+                // Secondary + tertiary (only draw if active)
+                if (isActive) {
+                    const secs = cat.secondary;
+                    const secSlice = coreSlice / secs.length;
+                    for (let si = 0; si < secs.length; si++) {
+                        const sa0 = a0 + si * secSlice;
+                        const sa1 = sa0 + secSlice;
+
+                        // Secondary arc
+                        ctx.beginPath();
+                        ctx.arc(CX, CY, R_MID, sa0, sa1);
+                        ctx.arc(CX, CY, R_CORE, sa1, sa0, true);
+                        ctx.closePath();
+                        ctx.fillStyle = cat.hueMid;
+                        ctx.fill();
+                        ctx.strokeStyle = '#FAFAF7';
+                        ctx.lineWidth = 1.5;
+                        ctx.stroke();
+                        hitMap.push({ type: 'secondary', coreIdx: ci, secIdx: si, startAngle: sa0, endAngle: sa1, rMin: R_CORE, rMax: R_MID });
+
+                        // Secondary label
+                        const saMid = (sa0 + sa1) / 2;
+                        const sr = (R_CORE + R_MID) / 2;
+                        ctx.save();
+                        ctx.translate(CX + Math.cos(saMid) * sr, CY + Math.sin(saMid) * sr);
+                        let rot = saMid;
+                        if (rot > Math.PI/2 && rot < Math.PI*1.5) rot += Math.PI;
+                        ctx.rotate(rot);
+                        ctx.fillStyle = '#1C1917';
+                        ctx.font = '600 10px Inter, sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(secs[si].name, 0, 0);
+                        ctx.restore();
+
+                        // Tertiary
+                        const ters = secs[si].tertiary;
+                        const terSlice = secSlice / ters.length;
+                        for (let ti = 0; ti < ters.length; ti++) {
+                            const ta0 = sa0 + ti * terSlice;
+                            const ta1 = ta0 + terSlice;
+
+                            ctx.beginPath();
+                            ctx.arc(CX, CY, R_OUTER, ta0, ta1);
+                            ctx.arc(CX, CY, R_MID, ta1, ta0, true);
+                            ctx.closePath();
+                            const isSelected = (selectedWord === ters[ti]);
+                            ctx.fillStyle = isSelected ? cat.hueMid : cat.hueLight;
+                            ctx.fill();
+                            ctx.strokeStyle = '#FAFAF7';
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                            hitMap.push({ type: 'tertiary', coreIdx: ci, secIdx: si, terIdx: ti, startAngle: ta0, endAngle: ta1, rMin: R_MID, rMax: R_OUTER });
+
+                            // Tertiary label
+                            const taMid = (ta0 + ta1) / 2;
+                            const tr = (R_MID + R_OUTER) / 2;
+                            ctx.save();
+                            ctx.translate(CX + Math.cos(taMid) * tr, CY + Math.sin(taMid) * tr);
+                            let trot = taMid;
+                            if (trot > Math.PI/2 && trot < Math.PI*1.5) trot += Math.PI;
+                            ctx.rotate(trot);
+                            ctx.fillStyle = isSelected ? '#1C1917' : '#57534E';
+                            ctx.font = (isSelected ? '700' : '400') + ' 9px Inter, sans-serif';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText(ters[ti], 0, 0);
+                            ctx.restore();
+                        }
+                    }
+                }
+            }
+
+            // Center circle
+            ctx.beginPath();
+            ctx.arc(CX, CY, R_INNER - 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#FAFAF7';
+            ctx.fill();
+            ctx.font = '600 11px Inter, sans-serif';
+            ctx.fillStyle = '#A8A29E';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('How do', CX, CY - 8);
+            ctx.fillText('you feel?', CX, CY + 8);
+        }
+
+        function getHit(x, y) {
+            const dx = x - CX, dy = y - CY;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            let angle = Math.atan2(dy, dx);
+            if (angle < -Math.PI/2) angle += Math.PI * 2;
+
+            for (let i = hitMap.length - 1; i >= 0; i--) {
+                const h = hitMap[i];
+                if (dist < h.rMin || dist > h.rMax) continue;
+                let a = angle;
+                let s = h.startAngle, e = h.endAngle;
+                // Normalize angles for comparison
+                while (a < s) a += Math.PI * 2;
+                while (a > e + Math.PI * 2) a -= Math.PI * 2;
+                if (a >= s && a <= e) return h;
+            }
+            return null;
+        }
+
+        canvas.addEventListener('click', function(evt) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = W / rect.width;
+            const scaleY = H / rect.height;
+            const x = (evt.clientX - rect.left) * scaleX;
+            const y = (evt.clientY - rect.top) * scaleY;
+            const hit = getHit(x, y);
+
+            if (!hit) {
+                activeCore = -1;
+                selectedWord = null;
+                chip.style.display = 'none';
+                hintEl.textContent = 'Click a slice to explore. Click an outer word to pick it.';
+                draw();
+                return;
+            }
+
+            if (hit.type === 'core') {
+                activeCore = (activeCore === hit.coreIdx) ? -1 : hit.coreIdx;
+                selectedWord = null;
+                chip.style.display = 'none';
+                if (activeCore >= 0) {
+                    hintEl.textContent = 'Now click an outer ring word to select it.';
+                } else {
+                    hintEl.textContent = 'Click a slice to explore. Click an outer word to pick it.';
+                }
+                draw();
+            } else if (hit.type === 'tertiary') {
+                const cat = DATA[hit.coreIdx];
+                const word = cat.secondary[hit.secIdx].tertiary[hit.terIdx];
+                selectedWord = word;
+                chip.style.display = 'inline-block';
+                chip.style.background = cat.hue;
+                chip.textContent = word;
+                hintEl.textContent = cat.core + ' \u2192 ' + cat.secondary[hit.secIdx].name + ' \u2192 ' + word;
+                draw();
+            } else if (hit.type === 'secondary') {
+                const cat = DATA[hit.coreIdx];
+                const word = cat.secondary[hit.secIdx].name;
+                selectedWord = null;
+                chip.style.display = 'inline-block';
+                chip.style.background = cat.hue;
+                chip.textContent = word;
+                hintEl.textContent = cat.core + ' \u2192 ' + word;
+                draw();
+            }
+        });
+
+        // Hover cursor
+        canvas.addEventListener('mousemove', function(evt) {
+            const rect = canvas.getBoundingClientRect();
+            const x = (evt.clientX - rect.left) * (W / rect.width);
+            const y = (evt.clientY - rect.top) * (H / rect.height);
+            canvas.style.cursor = getHit(x, y) ? 'pointer' : 'default';
+        });
+
+        draw();
+    })();
 </script>
 
 </body>
