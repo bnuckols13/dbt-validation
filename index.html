@@ -462,10 +462,11 @@
     <nav class="nav">
         <button class="active" onclick="showPage(0, this)">Welcome</button>
         <button onclick="showPage(1, this)">Six Levels</button>
-        <button onclick="showPage(2, this)">Self-Validation</button>
-        <button onclick="showPage(3, this)">Practice</button>
-        <button onclick="showPage(4, this)">Discussion</button>
-        <button onclick="showPage(5, this)">Closing</button>
+        <button onclick="showPage(2, this)">Invalidation</button>
+        <button onclick="showPage(3, this)">Self-Validation</button>
+        <button onclick="showPage(4, this)">Practice</button>
+        <button onclick="showPage(5, this)">Discussion</button>
+        <button onclick="showPage(6, this)">Closing</button>
     </nav>
 
 
@@ -675,7 +676,100 @@
 
         <div class="page-nav">
             <button onclick="showPage(0, navBtns[0])">&#8592; Welcome</button>
-            <button onclick="showPage(2, navBtns[2])">Self-Validation &#8594;</button>
+            <button onclick="showPage(2, navBtns[2])">Invalidation &#8594;</button>
+        </div>
+    </div>
+
+
+    <!-- ======================== INVALIDATION ======================== -->
+    <div class="page">
+
+        <div class="section-label cool">The other side</div>
+        <h2><span class="timing">10 to 12 min</span>What invalidation looks like</h2>
+        <p class="body-text">
+            Before you can validate well, you need to recognize what invalidation actually sounds like. Most invalidation isn't cruel. It's well-meaning. It comes from people who care about you and have no idea they're making things worse.
+        </p>
+        <p class="body-text">
+            Linehan's biosocial theory says that emotional dysregulation develops when a biologically sensitive person grows up in an environment that persistently communicates: your internal experience is wrong. Over time, you internalize that message and become your own primary invalidator.
+        </p>
+
+        <div class="callout warm">
+            <div class="callout-label">Clinical note</div>
+            <p>This section is not about blaming families. Many participants will feel protective of their caregivers. Normalize that: "You can recognize that your environment was invalidating <strong>and</strong> still love the people in it. Both things are true."</p>
+        </div>
+
+        <h3>Common forms of invalidation</h3>
+        <div class="accordion">
+            <div class="acc-item open" onclick="toggleAcc(this.querySelector('.acc-header'))">
+                <div class="acc-header">
+                    <span class="acc-title">Dismissing</span>
+                    <span class="acc-icon">+</span>
+                </div>
+                <div class="acc-body">
+                    <p>"You're fine." "It's not that bad." "Don't worry about it." "You're overthinking this."</p>
+                    <p>The message: your emotional response is disproportionate to the situation. The effect: you stop trusting your own internal signals. In eating disorder recovery, this sounds like "just eat" or "you look fine, stop worrying."</p>
+                </div>
+            </div>
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAcc(this)">
+                    <span class="acc-title">Fixing</span>
+                    <span class="acc-icon">+</span>
+                </div>
+                <div class="acc-body">
+                    <p>"Have you tried...?" "You should..." "What if you just..." "Here's what I would do."</p>
+                    <p>Fixing skips past the emotional experience and jumps to solutions. It communicates: your pain is a problem to be solved, not an experience to be witnessed. The person stops sharing because every time they do, they get a to-do list instead of being heard.</p>
+                </div>
+            </div>
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAcc(this)">
+                    <span class="acc-title">Minimizing</span>
+                    <span class="acc-icon">+</span>
+                </div>
+                <div class="acc-body">
+                    <p>"At least you have..." "It could be worse." "Other people have it harder." "Be grateful for what you have."</p>
+                    <p>Minimizing introduces a comparison that makes the person's pain feel illegitimate. It sets a threshold for suffering that your experience has to clear before it counts. In recovery: "At least you're getting help" or "There are people who are much sicker."</p>
+                </div>
+            </div>
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAcc(this)">
+                    <span class="acc-title">Cheerleading</span>
+                    <span class="acc-icon">+</span>
+                </div>
+                <div class="acc-body">
+                    <p>"You've got this!" "Stay positive!" "You're so strong!" "Everything happens for a reason."</p>
+                    <p>Forced optimism communicates that the person's pain is uncomfortable for <strong>you</strong>, and you'd prefer they package it more neatly. It makes the suffering person responsible for managing the listener's discomfort. In recovery: "But you look so much healthier now!"</p>
+                </div>
+            </div>
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAcc(this)">
+                    <span class="acc-title">One-upping</span>
+                    <span class="acc-icon">+</span>
+                </div>
+                <div class="acc-body">
+                    <p>"I know exactly how you feel, when I was..." "That happened to me too, and I..."</p>
+                    <p>Redirecting someone's pain into your own story communicates: your experience is a springboard for mine. The person learns that sharing means losing the floor. Empathy is not the same as identification.</p>
+                </div>
+            </div>
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAcc(this)">
+                    <span class="acc-title">Judging</span>
+                    <span class="acc-icon">+</span>
+                </div>
+                <div class="acc-body">
+                    <p>"Why would you feel that way?" "That doesn't make sense." "You shouldn't let that bother you."</p>
+                    <p>Judging treats an emotional response as a character flaw rather than a signal. The word "should" is almost always invalidating when applied to emotions. Emotions don't follow logic. Telling someone they shouldn't feel something doesn't stop the feeling. It just adds shame on top of it.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="callout cool">
+            <div class="callout-label">Facilitator note</div>
+            <p>After walking through these, ask the group: "Which of these do you hear most often? Which one do you do most to yourself?" Most people will recognize multiple patterns. The self-directed version is where the real work begins.</p>
+        </div>
+
+        <div class="page-nav">
+            <button onclick="showPage(1, navBtns[1])">&#8592; Six Levels</button>
+            <button onclick="showPage(3, navBtns[3])">Self-Validation &#8594;</button>
         </div>
     </div>
 
@@ -762,8 +856,8 @@
         </div>
 
         <div class="page-nav">
-            <button onclick="showPage(1, navBtns[1])">&#8592; Six Levels</button>
-            <button onclick="showPage(3, navBtns[3])">Practice &#8594;</button>
+            <button onclick="showPage(2, navBtns[2])">&#8592; Invalidation</button>
+            <button onclick="showPage(4, navBtns[4])">Practice &#8594;</button>
         </div>
     </div>
 
@@ -888,8 +982,8 @@
         </div>
 
         <div class="page-nav">
-            <button onclick="showPage(2, navBtns[2])">&#8592; Self-Validation</button>
-            <button onclick="showPage(4, navBtns[4])">Discussion &#8594;</button>
+            <button onclick="showPage(3, navBtns[3])">&#8592; Self-Validation</button>
+            <button onclick="showPage(5, navBtns[5])">Discussion &#8594;</button>
         </div>
     </div>
 
@@ -929,8 +1023,8 @@
         </div>
 
         <div class="page-nav">
-            <button onclick="showPage(3, navBtns[3])">&#8592; Practice</button>
-            <button onclick="showPage(5, navBtns[5])">Closing &#8594;</button>
+            <button onclick="showPage(4, navBtns[4])">&#8592; Practice</button>
+            <button onclick="showPage(6, navBtns[6])">Closing &#8594;</button>
         </div>
     </div>
 
