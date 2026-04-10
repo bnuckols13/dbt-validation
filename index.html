@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation — Interpersonal Effectiveness</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --text:       #1C1917;
+            --text-2:     #57534E;
+            --text-3:     #A8A29E;
+            --accent:     #5B7B9A;
+            --accent-bg:  #EDF2F6;
+            --cool:       #9A6B5B;
+            --cool-bg:    #F6EFEC;
+            --border:     #E7E5E4;
+            --bg:         #FAFAF7;
+            --surface:    #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body::before {
+            content: '';
+            display: block;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--cool) 100%);
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 4rem;
+        }
+
+        /* ---- Header ---- */
+        .header { margin-bottom: 2.5rem; }
+        .header-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--text);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            font-size: 1.05rem;
+            color: var(--text-2);
+            font-weight: 400;
+        }
+
+        /* ---- Nav ---- */
+        .nav {
+            display: flex;
+            gap: 0.25rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2.5rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .nav button {
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            padding: 0.75rem 1rem;
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-3);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .nav button:hover { color: var(--text-2); }
+        .nav button.active {
+            color: var(--accent);
+            font-weight: 600;
+            border-bottom-color: var(--accent);
+        }
+
+        /* ---- Pages ---- */
+        .page { display: none; }
+        .page.active { display: block; animation: appear 0.25s ease; }
+        @keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ---- Typography ---- */
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-3);
+            margin-bottom: 0.5rem;
+        }
+        .section-label.warm { color: var(--accent); }
+        .section-label.cool { color: var(--cool); }
+
+        h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.01em;
+            margin-bottom: 0.75rem;
+        }
+        h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        .body-text {
+            font-size: 0.95rem;
+            color: var(--text-2);
+            line-height: 1.8;
+        }
+        .body-text + .body-text { margin-top: 0.75rem; }
+        .body-text strong { color: var(--text); font-weight: 600; }
+
+        .timing {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-3);
+            float: right;
+            margin-top: 0.2rem;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 2.5rem 0;
+        }
+
+        /* ---- Callout ---- */
+        .callout {
+            border-left: 3px solid var(--border);
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+        }
+        .callout.warm { border-left-color: var(--accent); background: var(--accent-bg); }
+        .callout.cool { border-left-color: var(--cool); background: var(--cool-bg); }
+        .callout .callout-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-3);
+            margin-bottom: 0.4rem;
+        }
+        .callout.warm .callout-label { color: var(--accent); }
+        .callout.cool .callout-label { color: var(--cool); }
+        .callout p { font-size: 0.9rem; color: var(--text-2); line-height: 1.7; }
+        .callout p strong { color: var(--text); }
+
+        /* ---- Steps ---- */
+        .steps { margin: 1.5rem 0; }
+        .step {
+            display: flex;
+            gap: 1rem;
+            align-items: baseline;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .step:last-child { border-bottom: none; }
+        .step-num {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-3);
+            flex-shrink: 0;
+            width: 1.5rem;
+            text-align: right;
+        }
+        .step-content { flex: 1; }
+        .step-q { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+        .step-hint { font-size: 0.82rem; color: var(--text-3); margin-top: 0.15rem; line-height: 1.6; }
+
+        /* ---- Accordion ---- */
+        .accordion { margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        .acc-item { border-bottom: 1px solid var(--border); }
+        .acc-item:last-child { border-bottom: none; }
+        .acc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            background: var(--surface);
+            transition: background 0.15s;
+            user-select: none;
+        }
+        .acc-header:hover { background: var(--bg); }
+        .acc-title { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+        .acc-icon { font-size: 1.1rem; color: var(--text-3); transition: transform 0.2s; font-weight: 300; line-height: 1; }
+        .acc-item.open .acc-icon { transform: rotate(45deg); }
+        .acc-body { display: none; padding: 0 1.25rem 1.25rem; background: var(--surface); }
+        .acc-item.open .acc-body { display: block; }
+        .acc-body p { font-size: 0.9rem; color: var(--text-2); line-height: 1.75; }
+        .acc-body p + p { margin-top: 0.75rem; }
+        .acc-body ul { list-style: none; margin-top: 0.5rem; }
+        .acc-body ul li {
+            font-size: 0.9rem;
+            color: var(--text-2);
+            line-height: 1.75;
+            padding-left: 1rem;
+            position: relative;
+        }
+        .acc-body ul li::before {
+            content: '\00B7';
+            position: absolute;
+            left: 0;
+            color: var(--text-3);
+        }
+        .acc-body .aside {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            font-style: italic;
+            color: var(--text-3);
+            padding-left: 1rem;
+            border-left: 2px solid var(--border);
+        }
+
+        /* ---- Scenario cards (practice) ---- */
+        .scenario-stack { margin: 1.5rem 0; }
+        .scenario-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+        .scenario-body {
+            padding: 1.5rem 1.5rem 1.25rem;
+            background: var(--surface);
+        }
+        .scenario-tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            margin-bottom: 0.75rem;
+        }
+        .scenario-tag.warm { color: var(--accent); background: var(--accent-bg); }
+        .scenario-tag.cool { color: var(--cool); background: var(--cool-bg); }
+        .scenario-text {
+            font-size: 0.95rem;
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .scenario-options {
+            border-top: 1px solid var(--border);
+        }
+        .scenario-opt {
+            display: block;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            font-family: inherit;
+            font-size: 0.88rem;
+            text-align: left;
+            cursor: pointer;
+            background: var(--surface);
+            color: var(--text-2);
+            line-height: 1.6;
+            transition: background 0.15s, color 0.15s;
+        }
+        .scenario-opt:last-child { border-bottom: none; }
+        .scenario-opt:hover:not(:disabled) { background: var(--bg); color: var(--text); }
+        .scenario-opt .opt-letter {
+            display: inline-block;
+            font-weight: 700;
+            color: var(--text-3);
+            width: 1.5rem;
+        }
+        .scenario-opt.correct { background: var(--accent-bg); color: var(--accent); }
+        .scenario-opt.correct .opt-letter { color: var(--accent); }
+        .scenario-opt.wrong { opacity: 0.35; }
+        .scenario-opt:disabled { cursor: default; }
+        .scenario-reveal {
+            display: none;
+            padding: 1.25rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+        }
+        .scenario-reveal.show { display: block; }
+        .scenario-reveal p { font-size: 0.9rem; color: var(--text-2); line-height: 1.75; }
+
+        /* ---- Discussion ---- */
+        .questions { margin: 1.5rem 0; }
+        .question { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+        .question:last-child { border-bottom: none; }
+        .question-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 0.3rem; }
+        .question-text { font-size: 0.95rem; font-weight: 500; color: var(--text); line-height: 1.7; }
+        .question-note { font-size: 0.82rem; font-style: italic; color: var(--text-3); margin-top: 0.3rem; }
+
+        /* ---- Check-in grid ---- */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+        .option {
+            background: var(--surface);
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .option:hover { background: var(--bg); }
+        .option.selected { background: var(--accent-bg); }
+        .option-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.2rem;
+        }
+        .option-desc {
+            font-size: 0.8rem;
+            color: var(--text-3);
+            line-height: 1.5;
+        }
+
+        /* ---- Curriculum overview ---- */
+        .curriculum-grid {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            font-size: 0.78rem;
+        }
+        .curriculum-grid .cell {
+            background: var(--surface);
+            padding: 0.6rem 0.75rem;
+            color: var(--text-2);
+            line-height: 1.4;
+        }
+        .curriculum-grid .cell.header-cell {
+            font-weight: 600;
+            color: var(--text-3);
+            font-size: 0.65rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: var(--bg);
+        }
+        .curriculum-grid .cell.module-cell {
+            font-weight: 600;
+            color: var(--text);
+            background: var(--bg);
+        }
+        .curriculum-grid .cell.current {
+            background: var(--accent-bg);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* ---- Page nav ---- */
+        .page-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        .page-nav button {
+            background: none; border: none; font-family: inherit;
+            font-size: 0.9rem; font-weight: 500; color: var(--accent);
+            cursor: pointer; padding: 0.5rem 0; transition: opacity 0.15s;
+        }
+        .page-nav button:hover { opacity: 0.7; }
+        .page-nav .ghost { visibility: hidden; }
+
+        /* ---- Footer ---- */
+        .footer {
+            margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
+            text-align: center; font-size: 0.8rem; color: var(--text-3); line-height: 1.8;
+        }
+        .footer strong { color: var(--text-2); font-weight: 600; }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 600px) {
+            .container { padding: 2rem 1.25rem 3rem; }
+            h1 { font-size: 1.8rem; }
+            .options-grid { grid-template-columns: 1fr; }
+            .curriculum-grid { font-size: 0.7rem; }
+            .curriculum-grid .cell { padding: 0.4rem 0.5rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header class="header">
+        <div class="header-label">DBT Skills &mdash; Adult Group</div>
+        <h1>Validation</h1>
+        <p class="subtitle">How to make someone feel heard without fixing, agreeing, or disappearing</p>
+    </header>
+
+    <nav class="nav">
+        <button class="active" onclick="showPage(0, this)">Welcome</button>
+        <button onclick="showPage(1, this)">Six Levels</button>
+        <button onclick="showPage(2, this)">Self-Validation</button>
+        <button onclick="showPage(3, this)">Practice</button>
+        <button onclick="showPage(4, this)">Discussion</button>
+        <button onclick="showPage(5, this)">Closing</button>
+    </nav>
+
+
+    <!-- ======================== WELCOME ======================== -->
+    <div class="page active">
+
+        <div class="section-label warm">Welcome</div>
+        <h2><span class="timing">8 to 10 min</span>About today</h2>
+        <p class="body-text">
+            Most people think validation means telling someone they're right. It doesn't. Validation means communicating that a person's experience makes sense given their context. You can validate someone's pain without endorsing their conclusions. You can validate an emotion without acting on it.
+        </p>
+        <p class="body-text">
+            Today we're learning validation as both a <strong>relationship skill</strong> and a <strong>self-regulation skill</strong>. Linehan identified six levels of validation, from simply paying attention to radical genuineness. We'll walk through each one, then practice identifying validating responses in real scenarios.
+        </p>
+        <p class="body-text">
+            For many people in recovery, the harder version of this skill isn't validating others. It's validating yourself. The eating disorder functions as a self-invalidation machine: your hunger isn't real, your body is wrong, your emotions are too much. Self-validation is the direct counter to that pattern.
+        </p>
+
+        <div class="callout warm">
+            <div class="callout-label">Confidentiality</div>
+            <p>What's shared here stays here. Names, stories, details, all of it is protected. The only exception is safety.</p>
+        </div>
+
+        <div class="callout">
+            <p><strong>You can pass at any point.</strong> No explanation needed. If something doesn't fit right now, say "pass" and we move on.</p>
+        </div>
+
+        <hr class="divider">
+
+        <div class="section-label">Where we are</div>
+        <h2>Module 7 curriculum</h2>
+        <p class="body-text">
+            Each week we rotate through four skill areas. Here's the current module and what's ahead.
+        </p>
+
+        <div class="curriculum-grid">
+            <div class="cell header-cell"></div>
+            <div class="cell header-cell">Tue</div>
+            <div class="cell header-cell">Wed</div>
+            <div class="cell header-cell">Thu</div>
+            <div class="cell header-cell">Fri</div>
+
+            <div class="cell module-cell">Mod 7</div>
+            <div class="cell">Distress Tolerance: Turning the Mind</div>
+            <div class="cell">Mindful Awareness: Loving Kindness</div>
+            <div class="cell">Emotion Regulation: Pleasant Activities</div>
+            <div class="cell current">Inter. Effectiveness: Validation</div>
+
+            <div class="cell module-cell">Mod 8</div>
+            <div class="cell">Mindful Awareness: Doing/Being</div>
+            <div class="cell">Distress Tolerance: Chain Analysis</div>
+            <div class="cell">Inter. Effectiveness: Assertiveness</div>
+            <div class="cell">Emotion Regulation: Values/Priorities</div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="section-label">Check-in</div>
+        <h2><span class="timing">10 to 12 min</span>Bridge questions</h2>
+        <p class="body-text">Share your name, then take these one at a time.</p>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <div class="step-q">Think of a time someone responded to your pain and you felt genuinely heard. What did they do or say?</div>
+                    <div class="step-hint">Focus on what they didn't do, too. Did they not try to fix it? Not rush past it? Not compare it to their own experience?</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <div class="step-q">When someone dismisses or minimizes what you're feeling, what is your first impulse?</div>
+                    <div class="step-hint">To shut down, to escalate, to agree with them, to leave. No wrong answer here.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <div class="step-q">Where in your body do you first notice the difference between being validated and being tolerated?</div>
+                    <div class="step-hint">Chest, shoulders, jaw, stomach. Let your body answer before your mind does.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-nav">
+            <button class="ghost">&#8592; Back</button>
+            <button onclick="showPage(1, navBtns[1])">Six Levels &#8594;</button>
+        </div>
+    </div>
+
+
+    <!-- ======================== SIX LEVELS ======================== -->
+    <div class="page">
+
+        <div class="section-label warm">The skill</div>
+        <h2><span class="timing">15 to 20 min</span>Linehan's six levels of validation</h2>
+        <p class="body-text">
+            Validation isn't one thing. Linehan identified six levels, from the simplest act of paying attention to the most demanding form of genuine human response. Each level builds on the one before it.
+        </p>
+
+        <div class="callout warm">
+            <div class="callout-label">Clinical note</div>
+            <p>Validation does not mean agreement, approval, or permission. You can validate that someone feels terrified of weight gain <strong>without</strong> validating the conclusion that they should restrict. The emotion is real. The eating disorder's solution to that emotion is what we're working to change.</p>
+        </div>
+
+        <div class="accordion">
+            <div class="acc-item open" onclick="toggleAcc(this.querySelector('.acc-header'))">
+                <div class="acc-header">
+                    <span class="acc-title">Level 1: Being present</span>
+                    <span class="acc-icon">+</span>
+                </div>
+                <div class="acc-body">
+                    <p>Give undivided, nonjudgmental attention. Put down the phone. Stop composing your response while the other person is still talking. Let them see that you are there.</p>
+                    <p>This sounds easy. It is not. Most of what we call "listening" is actually "waiting to talk." Level 1 asks you to stay in the other person's experience without drifting into your own.</p>
+                    <div class="aside">For self-validation, Level 1 means staying with your internal experience instead of numbing, distracting, or using behaviors to escape it. Noticing the urge without immediately acting.</div>
+                </div>
+            </div>
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAcc(this)">
+                    <span class="acc-title">Level 2: Accurate reflection</span>
+                    <span class="acc-icon">+</span>
+                </div>
+                <div class="acc-body">
+                    <p>Restate what you heard without interpretation. Reflect content and emotion back faithfully. This communicates "I actually heard you," not "I have an opinion about what you said."</p>
+                    <p>Must be authentic, not formulaic. If it sounds like a therapy technique, it doesn't count. The person should feel heard, not processed.</p>
+                    <div class="aside">Self-version: accurately naming what you feel. "I'm anxious right now" rather than "I feel fat," which is often a misattributed emotional state.</div>
+                </div>
+            </div>
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAcc(this)">
+                    <span class="acc-title">Level 3: Reading the unspoken</span>
+                    <span class="acc-icon">+</span>
+                </div>
+                <div class="acc-body">
+                    <p>Using behavioral cues, context, and what you know about the person to name what they haven't said yet. This requires willingness to be corrected. The other person remains the authority on their own experience.</p>
+                    <p><strong>Example:</strong> "I'm guessing that underneath the anger about the meal plan, there might be some real fear."</p>
+                    <div class="aside">Self-version: recognizing what you haven't acknowledged. "I keep saying I'm angry at my dietitian, but I think I'm actually scared."</div>
+                </div>
+            </div>
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAcc(this)">
+                    <span class="acc-title">Level 4: Understanding in terms of history</span>
+                    <span class="acc-icon">+</span>
+                </div>
+                <div class="acc-body">
+                    <p>Communicating that the person's reactions make sense given their past experiences, their learning history, and their biology. This is where the biosocial model becomes directly therapeutic.</p>
+                    <p><strong>Example:</strong> "Given that you grew up in a household where emotions were dismissed and thinness was praised, it makes complete sense that you learned to manage distress through food restriction."</p>
+                    <div class="aside">Self-version: "Of course I panic when I eat carbs. I spent years being told they were dangerous. My body is responding to learned fear, not to actual danger."</div>
+                </div>
+            </div>
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAcc(this)">
+                    <span class="acc-title">Level 5: Normalizing</span>
+                    <span class="acc-icon">+</span>
+                </div>
+                <div class="acc-body">
+                    <p>Acknowledging that anyone in this situation would likely feel the same way. This reduces the shame of feeling "crazy" or "too much," which is powerful for people who have been told their emotions are excessive.</p>
+                    <p><strong>Example:</strong> "Most people in early recovery feel terrified when their body changes. That fear is a normal part of this process, not evidence that something is wrong with you."</p>
+                    <div class="aside">Self-version: "It is normal to struggle with this. Recovery is supposed to be hard. I'm not failing because I'm struggling."</div>
+                </div>
+            </div>
+            <div class="acc-item">
+                <div class="acc-header" onclick="toggleAcc(this)">
+                    <span class="acc-title">Level 6: Radical genuineness</span>
+                    <span class="acc-icon">+</span>
+                </div>
+                <div class="acc-body">
+                    <p>Treating the person as an equal, not as fragile. Responding person-to-person rather than from a clinical role. This includes honest feedback, appropriate realness, and refusing to handle someone with kid gloves.</p>
+                    <p><strong>Example:</strong> "I believe you can do this, and I'm not going to pretend it isn't hard" rather than cheerful platitudes.</p>
+                    <div class="aside">Self-version: being honest with yourself without self-attack or forced positivity. "This is really hard right now, and I'm doing it anyway. I don't have to pretend it's easy."</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="callout cool">
+            <div class="callout-label">Facilitator note</div>
+            <p>Walk through each level, opening one accordion at a time. Ask the group for their own examples at Levels 1 through 3. Demonstrate Levels 4 through 6 yourself, because they require more clinical nuance. Read the self-validation asides aloud for each level.</p>
+        </div>
+
+        <div class="page-nav">
+            <button onclick="showPage(0, navBtns[0])">&#8592; Welcome</button>
+            <button onclick="showPage(2, navBtns[2])">Self-Validation &#8594;</button>
+        </div>
+    </div>
+
+
+    <!-- ======================== SELF-VALIDATION ======================== -->
+    <div class="page">
+
+        <div class="section-label cool">Turning the skill inward</div>
+        <h2><span class="timing">10 to 15 min</span>Self-validation in recovery</h2>
+        <p class="body-text">
+            Most people in this room are better at validating others than validating themselves. If your best friend told you she was terrified about eating dinner, you would never say "that's stupid, just eat." But you say exactly that to yourself.
+        </p>
+        <p class="body-text">
+            Self-validation means giving yourself the same response you would give someone you care about. In recovery, this is the direct counter to the eating disorder's voice, which functions as an internal invalidation machine.
+        </p>
+
+        <div class="callout warm">
+            <div class="callout-label">The pattern</div>
+            <p>Invalidation turns the volume <strong>up</strong> on emotions, because the emotion has to get louder to be heard. Validation turns it <strong>down</strong>. This is counterintuitive. People think acknowledging pain makes it worse. The opposite is true.</p>
+        </div>
+
+        <h3>Self-invalidation sounds like:</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <div class="step-q">"I shouldn't feel this way."</div>
+                    <div class="step-hint">Telling yourself your emotional response is wrong, excessive, or unjustified.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <div class="step-q">"Other people have it worse."</div>
+                    <div class="step-hint">Comparing your pain to an imaginary threshold it has to clear before it counts.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <div class="step-q">"I'm being dramatic."</div>
+                    <div class="step-hint">Labeling the emotion as a character flaw rather than a legitimate signal.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <div class="step-q">"I should be over this by now."</div>
+                    <div class="step-hint">Imposing a timeline on healing that treats your own nervous system as an inconvenience.</div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <h3>Self-validation sounds like:</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <div class="step-q">"This feeling is real, even if I don't like it."</div>
+                    <div class="step-hint">Acknowledgment without judgment. The feeling exists. That's enough for now.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <div class="step-q">"Given what I've been through, this reaction makes sense."</div>
+                    <div class="step-hint">Level 4 validation turned inward. Context explains the response. The response doesn't need fixing.</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <div class="step-q">"I can feel this without obeying it."</div>
+                    <div class="step-hint">Validation and action are separate. The feeling is valid. The eating disorder's solution to that feeling is what we're changing.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="callout cool">
+            <div class="callout-label">Facilitator note</div>
+            <p>Read each self-invalidation statement aloud and ask the group: "Raise your hand if you've heard this one inside your own head this week." Expect high recognition. Then read the corresponding self-validation reframe. Ask: "What shifts in your body when you hear the second version?"</p>
+        </div>
+
+        <div class="page-nav">
+            <button onclick="showPage(1, navBtns[1])">&#8592; Six Levels</button>
+            <button onclick="showPage(3, navBtns[3])">Practice &#8594;</button>
+        </div>
+    </div>
+
+
+    <!-- ======================== PRACTICE ======================== -->
+    <div class="page">
+
+        <div class="section-label warm">Practice</div>
+        <h2><span class="timing">15 to 20 min</span>What would you say?</h2>
+        <p class="body-text">
+            Each scenario is something someone in recovery might say. Four possible responses follow. One is validating. The others are fixing, invalidating, or dismissing. Read the scenario aloud, then ask the group which response they'd choose and why.
+        </p>
+
+        <div class="callout">
+            <p><strong>Disagreement is where the learning happens.</strong> When people choose different answers, explore what drew them to that response. The goal isn't to get the "right" answer. It's to feel the difference between responses in your body.</p>
+        </div>
+
+        <div class="scenario-stack">
+
+            <!-- Scenario 1 -->
+            <div class="scenario-card">
+                <div class="scenario-body">
+                    <div class="scenario-tag warm">Scenario 1</div>
+                    <div class="scenario-text">"I followed my meal plan all week but I feel terrible about it. I keep thinking I don't actually need this much food."</div>
+                </div>
+                <div class="scenario-options">
+                    <button class="scenario-opt" onclick="pickOpt(this, 0, 'A')" data-correct="false"><span class="opt-letter">A.</span> "You're doing so well though. Just keep going, it gets easier."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 0, 'B')" data-correct="true"><span class="opt-letter">B.</span> "It makes sense that this feels terrible. You're doing something your eating disorder is screaming at you not to do, and that conflict is real."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 0, 'C')" data-correct="false"><span class="opt-letter">C.</span> "Lots of people feel that way at first. It's totally normal."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 0, 'D')" data-correct="false"><span class="opt-letter">D.</span> "You definitely need the food. Your dietitian wouldn't prescribe it if you didn't."</button>
+                </div>
+                <div class="scenario-reveal" id="reveal-0">
+                    <p><strong>B is validating.</strong> It names the internal conflict without trying to resolve it. A and D contain true information but skip past the person's emotional experience. C normalizes without actually engaging with what was said.</p>
+                </div>
+            </div>
+
+            <!-- Scenario 2 -->
+            <div class="scenario-card">
+                <div class="scenario-body">
+                    <div class="scenario-tag cool">Scenario 2</div>
+                    <div class="scenario-text">"My mom keeps commenting on what I eat at dinner. I told her to stop and she said she's just worried about me."</div>
+                </div>
+                <div class="scenario-options">
+                    <button class="scenario-opt" onclick="pickOpt(this, 1, 'A')" data-correct="false"><span class="opt-letter">A.</span> "Have you tried writing her a letter explaining how it affects you?"</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 1, 'B')" data-correct="false"><span class="opt-letter">B.</span> "She probably doesn't mean any harm. She just loves you."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 1, 'C')" data-correct="true"><span class="opt-letter">C.</span> "That sounds really frustrating. You set a boundary and it wasn't respected, and being told it's because she cares makes it harder to push back."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 1, 'D')" data-correct="false"><span class="opt-letter">D.</span> "Just ignore her. Don't let it get to you."</button>
+                </div>
+                <div class="scenario-reveal" id="reveal-1">
+                    <p><strong>C is validating.</strong> B is the trickiest, because it sounds compassionate. Ask the group: if you were the person who said this, how would you feel hearing B? That surfaces how invalidation often wears empathy's clothing.</p>
+                </div>
+            </div>
+
+            <!-- Scenario 3 -->
+            <div class="scenario-card">
+                <div class="scenario-body">
+                    <div class="scenario-tag warm">Scenario 3</div>
+                    <div class="scenario-text">"I looked in the mirror this morning and just cried. I don't recognize myself anymore."</div>
+                </div>
+                <div class="scenario-options">
+                    <button class="scenario-opt" onclick="pickOpt(this, 2, 'A')" data-correct="false"><span class="opt-letter">A.</span> "But you look so much healthier now."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 2, 'B')" data-correct="false"><span class="opt-letter">B.</span> "Your body is doing exactly what it needs to do to heal."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 2, 'C')" data-correct="true"><span class="opt-letter">C.</span> "That sounds really painful. Grief about your body changing is a real part of this process."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 2, 'D')" data-correct="false"><span class="opt-letter">D.</span> "Try not to look in the mirror as much. That's what helped me."</button>
+                </div>
+                <div class="scenario-reveal" id="reveal-2">
+                    <p><strong>C is validating.</strong> A is the response most people give instinctively, and it does the most damage. It tells the person their grief is wrong because the outcome is "good." Ask the group: when have you received a response like A, and what did it do to your willingness to share again?</p>
+                </div>
+            </div>
+
+            <!-- Scenario 4 -->
+            <div class="scenario-card">
+                <div class="scenario-body">
+                    <div class="scenario-tag cool">Scenario 4</div>
+                    <div class="scenario-text">"Everyone else in this group seems so much further along than me. I feel like I'm failing at recovery."</div>
+                </div>
+                <div class="scenario-options">
+                    <button class="scenario-opt" onclick="pickOpt(this, 3, 'A')" data-correct="false"><span class="opt-letter">A.</span> "That's not true at all. You're doing great."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 3, 'B')" data-correct="false"><span class="opt-letter">B.</span> "Comparison is the thief of joy. Try to focus on your own path."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 3, 'C')" data-correct="false"><span class="opt-letter">C.</span> "Recovery isn't linear and everyone's timeline is different."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 3, 'D')" data-correct="true"><span class="opt-letter">D.</span> "It sounds like you're feeling really alone in this right now, like your struggle isn't visible to other people."</button>
+                </div>
+                <div class="scenario-reveal" id="reveal-3">
+                    <p><strong>D is validating.</strong> This one generates the most disagreement because A and C both contain accurate information. Factual accuracy and emotional validation are different things. The question isn't whether the statement is true. The question is whether the person feels heard.</p>
+                </div>
+            </div>
+
+            <!-- Scenario 5 -->
+            <div class="scenario-card">
+                <div class="scenario-body">
+                    <div class="scenario-tag warm">Scenario 5</div>
+                    <div class="scenario-text">"I had a really hard week and I used some old behaviors. I'm scared to even say it out loud."</div>
+                </div>
+                <div class="scenario-options">
+                    <button class="scenario-opt" onclick="pickOpt(this, 4, 'A')" data-correct="false"><span class="opt-letter">A.</span> "It's okay, everyone slips up. Don't beat yourself up."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 4, 'B')" data-correct="false"><span class="opt-letter">B.</span> "You should talk to your therapist about that right away."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 4, 'C')" data-correct="true"><span class="opt-letter">C.</span> "Thank you for trusting us with that. It took courage to say it, and I can hear how scared you are."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 4, 'D')" data-correct="false"><span class="opt-letter">D.</span> "What triggered it? Maybe we can figure out what went wrong."</button>
+                </div>
+                <div class="scenario-reveal" id="reveal-4">
+                    <p><strong>C is validating.</strong> A minimizes the fear the person just named. B and D redirect away from the emotional experience toward action. C validates the act of sharing itself, which is what the person needs before any problem-solving can happen.</p>
+                </div>
+            </div>
+
+            <!-- Scenario 6 -->
+            <div class="scenario-card">
+                <div class="scenario-body">
+                    <div class="scenario-tag cool">Scenario 6</div>
+                    <div class="scenario-text">"I know other people have it way worse than me. I feel guilty even taking up space in this group."</div>
+                </div>
+                <div class="scenario-options">
+                    <button class="scenario-opt" onclick="pickOpt(this, 5, 'A')" data-correct="false"><span class="opt-letter">A.</span> "Your pain is valid no matter what anyone else is going through."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 5, 'B')" data-correct="true"><span class="opt-letter">B.</span> "I hear you minimizing your own experience right now, and I wonder if that pattern goes back further than this group. You belong here."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 5, 'C')" data-correct="false"><span class="opt-letter">C.</span> "Yeah, but you're here for a reason. Just try to get what you can from it."</button>
+                    <button class="scenario-opt" onclick="pickOpt(this, 5, 'D')" data-correct="false"><span class="opt-letter">D.</span> "Comparing suffering isn't helpful. Everyone's experience is different."</button>
+                </div>
+                <div class="scenario-reveal" id="reveal-5">
+                    <p><strong>B is validating (Level 3/4).</strong> This scenario has a trick: A is also validating, but at Level 2. It's technically correct but can feel like a platitude. B reaches deeper by naming the pattern and connecting it to the person's history. Use this to show that validation has gradations.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="page-nav">
+            <button onclick="showPage(2, navBtns[2])">&#8592; Self-Validation</button>
+            <button onclick="showPage(4, navBtns[4])">Discussion &#8594;</button>
+        </div>
+    </div>
+
+
+    <!-- ======================== DISCUSSION ======================== -->
+    <div class="page">
+
+        <div class="section-label warm">Group process</div>
+        <h2><span class="timing">10 to 12 min</span>Discussion</h2>
+
+        <div class="questions">
+            <div class="question">
+                <div class="question-label">Question 1</div>
+                <div class="question-text">The eating disorder is often described as a response to an invalidating environment. What does that idea bring up for you?</div>
+                <div class="question-note">Let participants sit with the question before anyone responds. Watch for members who become protective of caregivers. Normalize ambivalence: "You can recognize that your environment was invalidating and still love the people in it."</div>
+            </div>
+            <div class="question">
+                <div class="question-label">Question 2</div>
+                <div class="question-text">What's the difference between someone validating your feelings and someone agreeing with your eating disorder?</div>
+                <div class="question-note">This targets a real clinical tension. Use it to teach the distinction between validating the emotion and validating the behavior. "Your pain is real" and "restricting is the right response to that pain" are not the same statement.</div>
+            </div>
+            <div class="question">
+                <div class="question-label">Question 3</div>
+                <div class="question-text">What does your internal self-invalidator sound like? Whose voice does it remind you of?</div>
+                <div class="question-note">After a few people share, ask the group to practice responding to one person's self-invalidation statement with genuine validation. This makes the skill real-time and relational.</div>
+            </div>
+            <div class="question">
+                <div class="question-label">Question 4</div>
+                <div class="question-text">When someone tries to fix your problem instead of hearing it, what happens to your willingness to keep talking?</div>
+                <div class="question-note">Most participants will recognize the shutting-down response. After discussion, connect to recovery: treatment teams and family often jump to fixing. How can participants ask for validation first?</div>
+            </div>
+            <div class="question">
+                <div class="question-label">Question 5</div>
+                <div class="question-text">What would change in your daily life if you treated your own emotional responses as reasonable given your history?</div>
+                <div class="question-note">This is the self-validation application question. Push for specifics. Not "I'd feel better" but "I'd stop arguing with myself about whether I'm allowed to be tired."</div>
+            </div>
+        </div>
+
+        <div class="page-nav">
+            <button onclick="showPage(3, navBtns[3])">&#8592; Practice</button>
+            <button onclick="showPage(5, navBtns[5])">Closing &#8594;</button>
+        </div>
+    </div>
+
+
+    <!-- ======================== CLOSING ======================== -->
+    <div class="page">
+
+        <div class="section-label warm">This week</div>
+        <h2><span class="timing">5 min</span>Pick one</h2>
+        <p class="body-text">
+            Choose one practice to try before next group. Not all of them. One concrete thing you're going to do differently.
+        </p>
+
+        <div class="options-grid">
+            <div class="option" onclick="selectOption(this)">
+                <div class="option-label">Validate before fixing</div>
+                <div class="option-desc">When someone comes to you with a problem, say one validating sentence before offering any solution.</div>
+            </div>
+            <div class="option" onclick="selectOption(this)">
+                <div class="option-label">Catch the self-invalidator</div>
+                <div class="option-desc">Notice when you tell yourself "I shouldn't feel this way." Replace it with "This makes sense given what I've been through."</div>
+            </div>
+            <div class="option" onclick="selectOption(this)">
+                <div class="option-label">Name the level</div>
+                <div class="option-desc">When someone validates you this week, try to identify which level they used. Notice how it feels.</div>
+            </div>
+            <div class="option" onclick="selectOption(this)">
+                <div class="option-label">The friend test</div>
+                <div class="option-desc">When a harsh thought about yourself shows up, ask: would I say this to a friend? If not, rewrite the thought as if you were talking to someone you care about.</div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="section-label">Checkout</div>
+        <h2>One sentence</h2>
+        <p class="body-text">
+            Name one thing from today that landed for you, and one concrete thing you're going to do differently this week. Not a goal. A plan.
+        </p>
+
+        <div class="callout cool">
+            <div class="callout-label">Facilitator note</div>
+            <p>Push for specificity on the checkout. "I'll be nicer to myself" doesn't count. "When I catch myself saying 'I shouldn't feel this way,' I'm going to pause and say 'this makes sense given my history'" does. The more concrete the commitment, the more likely the follow-through.</p>
+        </div>
+
+        <div class="footer">
+            <strong>Crisis resources</strong><br>
+            988 Suicide &amp; Crisis Lifeline: call or text <strong>988</strong><br>
+            Crisis Text Line: text <strong>HELLO</strong> to 741741
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const pages = document.querySelectorAll('.page');
+    const navBtns = document.querySelectorAll('.nav button');
+
+    function showPage(idx, btn) {
+        pages.forEach(p => p.classList.remove('active'));
+        navBtns.forEach(b => b.classList.remove('active'));
+        pages[idx].classList.add('active');
+        navBtns[idx].classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleAcc(header) {
+        header.parentElement.classList.toggle('open');
+    }
+
+    function pickOpt(btn, scenarioIdx, letter) {
+        const card = btn.closest('.scenario-card');
+        const opts = card.querySelectorAll('.scenario-opt');
+        const reveal = document.getElementById('reveal-' + scenarioIdx);
+
+        opts.forEach(o => {
+            o.disabled = true;
+            if (o.dataset.correct === 'true') {
+                o.classList.add('correct');
+            } else {
+                o.classList.add('wrong');
+            }
+        });
+
+        reveal.classList.add('show');
+    }
+
+    function selectOption(el) {
+        el.classList.toggle('selected');
+    }
+</script>
+
+</body>
+</html>
+</content>
+</invoke>
